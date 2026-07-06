@@ -30,12 +30,14 @@ function StoreApp() {
     }).format(amount);
   };
 
-  React.useEffect(() => {
-    let interval: ReturnType<typeof setInterval>;
-    if (showQrisModal && currentOrderId) {
-      interval = setInterval(async () => {
-        try {
-          const isPaidLocally = localStorage.getItem('qris_paid_' + currentOrderId) === 'true';
+  // Tambahkan di dalam useEffect App.tsx setelah baris 32:
+const handleStorageChange = (e: StorageEvent) => {
+  if (e.key === 'qris_paid_' + currentOrderId && e.newValue === 'true') {
+    proceedWithPayment(currentOrderId);
+  }
+};
+window.addEventListener('storage', handleStorageChange);
+  
           
           let isPaidServer = false;
           try {
