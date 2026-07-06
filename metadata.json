@@ -1,0 +1,6 @@
+{
+  "name": "Game TopUp Store",
+  "description": "Platform top up diamond Mobile Legends, Free Fire, PUBG, dan Robux dengan berbagai metode pembayaran.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
