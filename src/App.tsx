@@ -102,10 +102,12 @@ function StoreApp() {
     if (selectedGame.requiresZoneId && !zoneId) return;
 
     if (selectedPayment.type === 'qris') {
-      const orderId = 'ORD-' + Math.random().toString(36).substring(2, 9).toUpperCase();
-      setCurrentOrderId(orderId);
-      setShowQrisModal(true);
-    } else {
+  const orderId =
+    'ORD-' + Math.random().toString(36).substring(2, 9).toUpperCase();
+
+  proceedWithPayment(orderId);
+  return;
+    }
       proceedWithPayment();
     }
   };
