@@ -590,12 +590,13 @@ function MockPaymentPage() {
               <CheckCircle2 className="w-8 h-8 text-green-600" />
             </div>
             <h2 className="text-xl font-bold text-slate-900">Pembayaran Berhasil!</h2>
-            <p className="text-slate-500 text-sm">Anda dapat menutup halaman ini.</p>
+            <p className="text-slate-500 text-sm mb-4">Anda dapat menutup tab ini / You can close this tab.</p>
+            <p className="text-xs text-slate-400">Terima kasih telah berbelanja! / Thank you for shopping!</p>
           </div>
         ) : (
           <>
             <div>
-              <div className="text-sm text-slate-500 mb-1">Bayar ke</div>
+              <div className="text-sm text-slate-500 mb-1">Bayar ke / Pay to</div>
               <div className="font-bold text-slate-900">G-Store TopUp</div>
             </div>
             
@@ -614,7 +615,7 @@ function MockPaymentPage() {
                   <span>Memproses...</span>
                 </>
               ) : (
-                'Bayar Sekarang'
+                'Bayar Sekarang / Pay Now'
               )}
             </button>
           </>
