@@ -102,14 +102,14 @@ function StoreApp() {
     if (selectedGame.requiresZoneId && !zoneId) return;
 
     if (selectedPayment.type === 'qris') {
-  const orderId =
-    'ORD-' + Math.random().toString(36).substring(2, 9).toUpperCase();
+      const orderId =
+        'ORD-' + Math.random().toString(36).substring(2, 9).toUpperCase();
 
-  proceedWithPayment(orderId);
-  return;
+      setCurrentOrderId(orderId);
+      setShowQrisModal(true);
+      return;
     }
-      proceedWithPayment();
-    }
+    proceedWithPayment();
   };
 
   const resetForm = () => {
@@ -227,7 +227,7 @@ function StoreApp() {
                         value={userId}
                         onChange={(e) => { setUserId(e.target.value); setErrorMsg(''); }}
                         placeholder="Masukkan User ID"
-                        className="block w-full pl-10 bg-slate-950 border border-slate-800 rounded-xl py-3 text-white placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none"
+                        className="block w-full pl-10 bg-slate-950 border border-slate-800 rounded-xl py-3 text-white placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors"
                       />
                     </div>
                   </div>
@@ -239,7 +239,7 @@ function StoreApp() {
                         value={zoneId}
                         onChange={(e) => { setZoneId(e.target.value); setErrorMsg(''); }}
                         placeholder="(1234)"
-                        className="block w-full bg-slate-950 border border-slate-800 rounded-xl py-3 px-4 text-white placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none"
+                        className="block w-full bg-slate-950 border border-slate-800 rounded-xl py-3 px-4 text-white placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors"
                       />
                     </div>
                   )}
@@ -332,7 +332,7 @@ function StoreApp() {
                   <Gamepad2 className="w-32 h-32" />
                 </div>
                 <div className="flex items-center gap-2 mb-6">
-                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-600 text-white text-sm font-bold">4</span>
+                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-600 text-white text-sm font-bold">5</span>
                   <h2 className="text-xl font-bold text-white tracking-tight">Kode Voucher (Opsional)</h2>
                 </div>
                 <div className="flex gap-2">
@@ -341,7 +341,7 @@ function StoreApp() {
                     value={voucherCode}
                     onChange={(e) => setVoucherCode(e.target.value.toUpperCase())}
                     placeholder="Masukkan kode voucher..."
-                    className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-mono"
+                    className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
                   />
                   <button 
                     onClick={() => {
@@ -381,7 +381,7 @@ function StoreApp() {
                   <button
                     onClick={handlePay}
                     disabled={!isFormValid() || isProcessing}
-                    className="w-full sm:w-auto px-8 py-4 bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-700 disabled:text-slate-500 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 disabled:cursor-not-allowed shadow-lg shadow-indigo-500/25 disabled:shadow-none"
+                    className="w-full sm:w-auto px-8 py-4 bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-700 disabled:text-slate-500 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2"
                   >
                     {isProcessing ? (
                       <div className="flex items-center gap-2">
@@ -440,7 +440,7 @@ function StoreApp() {
 
               <div className="bg-slate-100 p-4 rounded-2xl mb-6 inline-block">
                 <img 
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`${window.location.origin}/pay?orderId=${currentOrderId}&amount=${selectedPackage.price + (selectedPayment?.fee || 0) - discountAmount}`)}`} 
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`${window.location.origin}/pay?orderId=${currentOrderId}&amount=${selectedPackage.price + (selectedPayment?.fee || 0) - discountAmount}`)}`}
                   alt="QR Code" 
                   className="w-48 h-48 mx-auto mix-blend-multiply" 
                 />
