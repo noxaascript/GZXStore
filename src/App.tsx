@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Gamepad2, User, CreditCard, CheckCircle2, ChevronRight, X, Wallet, Building2, QrCode, Search } from 'lucide-react';
+import { Gamepad2, User, CreditCard, CheckCircle2, X, Wallet, Building2, QrCode } from 'lucide-react';
 import { games, paymentMethods, type Game, type Package, type PaymentMethod } from './data';
 
 function StoreApp() {
@@ -17,7 +17,6 @@ function StoreApp() {
   const [receiptData, setReceiptData] = useState<any>(null);
   const [currentOrderId, setCurrentOrderId] = useState('');
   
-  // Auth and Voucher states
   const [currentUser, setCurrentUser] = useState<{name: string, email: string} | null>(null);
   const [voucherCode, setVoucherCode] = useState('');
   const [discountAmount, setDiscountAmount] = useState(0);
@@ -36,7 +35,6 @@ function StoreApp() {
     if (showQrisModal && currentOrderId) {
       interval = setInterval(async () => {
         try {
-          // Check local storage first (for static hosting like Vercel)
           const isPaidLocally = localStorage.getItem('qris_paid_' + currentOrderId) === 'true';
           
           let isPaidServer = false;
@@ -45,7 +43,7 @@ function StoreApp() {
             const data = await res.json();
             isPaidServer = data.paid;
           } catch (e) {
-            // Ignore API errors if on Vercel
+            // Ignore API errors
           }
 
           if (isPaidLocally || isPaidServer) {
@@ -88,10 +86,8 @@ function StoreApp() {
     };
 
     if (orderId) {
-      // For QRIS, it's already paid, just show receipt
       finishPayment();
     } else {
-      // Simulate payment delay of 5-10 seconds as requested for other methods
       const delay = Math.floor(Math.random() * 5000) + 5000;
       setTimeout(finishPayment, delay);
     }
@@ -102,9 +98,7 @@ function StoreApp() {
     if (selectedGame.requiresZoneId && !zoneId) return;
 
     if (selectedPayment.type === 'qris') {
-      const orderId =
-        'ORD-' + Math.random().toString(36).substring(2, 9).toUpperCase();
-
+      const orderId = 'ORD-' + Math.random().toString(36).substring(2, 9).toUpperCase();
       setCurrentOrderId(orderId);
       setShowQrisModal(true);
       return;
@@ -133,7 +127,6 @@ function StoreApp() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-indigo-500/30">
-      {/* Header */}
       <header className="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-md border-b border-white/5">
         <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -168,8 +161,6 @@ function StoreApp() {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-8 space-y-8">
-        
-        {/* Step 1: Select Game */}
         <section>
           <div className="flex items-center gap-2 mb-4">
             <span className="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-600 text-white text-sm font-bold">1</span>
@@ -209,7 +200,6 @@ function StoreApp() {
               animate={{ opacity: 1, y: 0 }}
               className="space-y-8"
             >
-              {/* Step 2: Account Details */}
               <section className="bg-slate-900 rounded-2xl p-6 ring-1 ring-white/5 shadow-xl">
                 <div className="flex items-center gap-2 mb-6">
                   <span className="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-600 text-white text-sm font-bold">2</span>
@@ -255,7 +245,6 @@ function StoreApp() {
                 </p>
               </section>
 
-              {/* Step 3: Select Nominal */}
               <section className="bg-slate-900 rounded-2xl p-6 ring-1 ring-white/5 shadow-xl">
                 <div className="flex items-center gap-2 mb-6">
                   <span className="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-600 text-white text-sm font-bold">3</span>
@@ -288,7 +277,6 @@ function StoreApp() {
                 </div>
               </section>
 
-              {/* Step 4: Payment Method */}
               <section className="bg-slate-900 rounded-2xl p-6 ring-1 ring-white/5 shadow-xl">
                 <div className="flex items-center gap-2 mb-6">
                   <span className="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-600 text-white text-sm font-bold">4</span>
@@ -321,12 +309,11 @@ function StoreApp() {
                           )}
                         </div>
                       </button>
-                    )
+                    );
                   })}
                 </div>
               </section>
 
-              {/* Voucher Section */}
               <section className="bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-xl ring-1 ring-white/5 relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-6 opacity-5">
                   <Gamepad2 className="w-32 h-32" />
@@ -365,7 +352,6 @@ function StoreApp() {
                 )}
               </section>
               
-              {/* Checkout Footer */}
               <div className="sticky bottom-4 z-30">
                 <div className="bg-slate-800/90 backdrop-blur-xl p-4 sm:p-6 rounded-2xl ring-1 ring-white/10 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
                   <div className="flex-1">
@@ -402,7 +388,6 @@ function StoreApp() {
         </AnimatePresence>
       </main>
 
-      {/* QRIS Modal */}
       <AnimatePresence>
         {showQrisModal && selectedPackage && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -459,7 +444,6 @@ function StoreApp() {
         )}
       </AnimatePresence>
 
-      {/* Receipt Modal */}
       <AnimatePresence>
         {showReceipt && receiptData && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -476,7 +460,6 @@ function StoreApp() {
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               className="relative w-full max-w-md bg-white text-slate-900 rounded-3xl overflow-hidden shadow-2xl"
             >
-              {/* Ticket Header */}
               <div className="bg-indigo-600 p-6 text-center text-white relative">
                 <div className="absolute top-4 right-4">
                   <button onClick={() => setShowReceipt(false)} className="p-1 hover:bg-white/20 rounded-full transition-colors">
@@ -490,7 +473,6 @@ function StoreApp() {
                 <p className="text-indigo-200 text-sm mt-1">Pembayaran telah kami terima.</p>
               </div>
 
-              {/* Ticket Body */}
               <div className="p-6 space-y-4">
                 <div className="flex justify-between items-center text-sm border-b border-slate-100 pb-4">
                   <span className="text-slate-500">Order ID</span>
@@ -542,7 +524,6 @@ function StoreApp() {
                 </div>
               </div>
 
-              {/* Ticket Footer */}
               <div className="bg-slate-50 p-6 flex flex-col items-center">
                 <button
                   onClick={() => {
@@ -572,21 +553,18 @@ function MockPaymentPage() {
   const handlePay = async () => {
     setStatus('processing');
     
-    // Fallback for Vercel (static hosting without backend)
     if (orderId) {
       localStorage.setItem('qris_paid_' + orderId, 'true');
     }
     
     try {
       const res = await fetch(`/api/pay/${orderId}`, { method: 'POST' });
-      // If API doesn't exist (Vercel), we still consider it success because of localStorage above
       if (res.ok || res.status === 404) {
         setStatus('success');
       } else {
         setStatus('error');
       }
     } catch (err) {
-      // Catch fetch errors (like no connection) but still succeed via localstorage for demo
       setStatus('success');
     }
   };
@@ -603,16 +581,16 @@ function MockPaymentPage() {
     <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4">
       <div className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl text-center space-y-6">
         <div className="flex justify-center">
-           <div className="font-bold text-3xl tracking-tighter text-blue-600 italic">QRIS</div>
+          <div className="font-bold text-3xl tracking-tighter text-blue-600 italic">QRIS</div>
         </div>
         
         {status === 'success' ? (
           <div className="space-y-4">
-             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <CheckCircle2 className="w-8 h-8 text-green-600" />
-             </div>
-             <h2 className="text-xl font-bold text-slate-900">Pembayaran Berhasil!</h2>
-             <p className="text-slate-500 text-sm">Anda dapat menutup halaman ini.</p>
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+              <CheckCircle2 className="w-8 h-8 text-green-600" />
+            </div>
+            <h2 className="text-xl font-bold text-slate-900">Pembayaran Berhasil!</h2>
+            <p className="text-slate-500 text-sm">Anda dapat menutup halaman ini.</p>
           </div>
         ) : (
           <>
@@ -622,7 +600,7 @@ function MockPaymentPage() {
             </div>
             
             <div className="py-4 border-y border-slate-100">
-               <div className="text-3xl font-bold text-slate-900">{amount ? formatRupiah(parseInt(amount)) : '-'}</div>
+              <div className="text-3xl font-bold text-slate-900">{amount ? formatRupiah(parseInt(amount)) : '-'}</div>
             </div>
 
             <button
@@ -630,14 +608,14 @@ function MockPaymentPage() {
               disabled={status === 'processing'}
               className="w-full py-4 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-500 transition-colors shadow-lg flex justify-center items-center gap-2"
             >
-               {status === 'processing' ? (
-                 <>
-                   <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                   <span>Memproses...</span>
-                 </>
-               ) : (
-                 'Bayar Sekarang'
-               )}
+              {status === 'processing' ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                  <span>Memproses...</span>
+                </>
+              ) : (
+                'Bayar Sekarang'
+              )}
             </button>
           </>
         )}
